@@ -41,10 +41,23 @@ def ListGetElement(l,i):
   return ret
 
 def ListAppendElement(l,e):
-  count = 0
-  if (e >= 0):
-    count = 1
-  return -1
+  binNew = 0
+  binTmp = 0
+  binRet = l
+  length = binLength(e)
+  for i in range(0,length):
+    binTmp = binTestBit(e,(length - i))
+    if (binTmp == 1):
+      binNew = (prodZ(binNew,4) + 3)
+    else:
+      binNew = prodZ(binNew,4)
+  lengthNew = (binLength(binNew) + 2)
+  if (binNew == 0):
+    lengthNew = 4
+  binNew = (prodZ(binNew,4) + 2)
+  for x in range(0,lengthNew):
+    binRet = prodZ(2,binRet)
+  return (binRet + binNew)
   
 ## Hilfsmethoden
 def prodZ(x,y):
@@ -84,13 +97,20 @@ def binTestBit(n,stelle):
 def binLength(n):
   ret = 0
   iStelle = 0
-  if (n <= 0):
+  if (n < 0):
     iStelle = 0
+  if (n == 0):
+    iStelle = 1
   while (n > 0):
     iStelle = (iStelle + 1)
     n = divtwo(n)
   return iStelle
 
-def main(x):
-  print(binLength(x))
+def main():
+  list = ListCreate()
+  list = ListAppendElement(list,0)
+  list = ListAppendElement(list,1)
+  list = ListAppendElement(list,2)
+  list = ListAppendElement(list,3)
+  print (ListGetElement(list,4))
   return -1
