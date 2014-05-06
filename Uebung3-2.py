@@ -1,11 +1,11 @@
 '''
-Created on 06.05.2014
+Friedrich Fell    Matnr.:2009756
 
-@author: Friedrich
+Matthias Proestler    Matnr.:2016779
+
+Uebungsgruppe 1
 '''
 def read(u,v,a): # liefert den Inhalt von Ra
-  var = 'test'
-  print(var)
   i = 0
   while (i < len(u) and u[i] != a): # Index a suchen
     i = i + 1
@@ -24,8 +24,6 @@ def write(u,v,a,b): # schreibt b in Ra
   v[i] = b # schreibt b in Ra
   
 def main():
-  var = 'TEST'
-  print(var)
   br = 0
   u = [0, 1, 2, 3]    # Liste der Indizes 
   v = [0, 1, 2, 3]    # Liste mit entsp. Inhalt

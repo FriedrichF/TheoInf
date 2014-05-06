@@ -1,5 +1,9 @@
 '''
-Friedrich Fell, Matthias Proestler    Uebungsgruppe 1
+Friedrich Fell    Matnr.:2009756
+
+Matthias Proestler    Matnr.:2016779
+
+Uebungsgruppe 1
 '''
 def DyadicRepresentation(x):
     rest = 0
