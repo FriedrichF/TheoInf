@@ -1,7 +1,5 @@
 '''
-Created on 06.05.2014
-
-@author: Friedrich
+Friedrich Fell, Matthias Proestler    Uebungsgruppe 1
 '''
 def DyadicRepresentation(x):
     rest = 0
@@ -20,7 +18,7 @@ def DyadicRepresentation(x):
 
 def Number(l):
     dez = 0
-    list = l[::-1]
+    list = l[::-1] #Liste umdrehen um die Wertigkeit einfacher zu berechnen
     wertigkeit = 1
     for i in range(0,len(l)):
         dez += wertigkeit * list[i]
@@ -106,5 +104,3 @@ def main(x):
     
     y = Number(b1)
     return y
-
-print (main(23))
