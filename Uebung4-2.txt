@@ -1,0 +1,12 @@
+'''
+Friedrich Fell    Matnr.:2009756
+
+Matthias Proestler    Matnr.:2016779
+
+Uebungsgruppe 1
+'''
+(z0,1)->(z0,1,R) //z1: gehe so lange nach Rechts bis Leerzeichen gefunden wurde
+(z0,2)->(z0,2,R)
+(z0,_)->(z2,_,L) 
+(z2,1)->(z1,_,O) //z2: Nachdem Leerzeichen gefunden wurde gehe eins nach Links und ersetze Zeichen mit Leerzeichen
+(z2,2)->(z1,_,O)
