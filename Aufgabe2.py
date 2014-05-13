@@ -1,12 +1,11 @@
 '''
-Created on 10.04.2014
+Friedrich Fell    Matnr.:2009756
 
-@author: Friedrich
+Matthias Proestler    Matnr.:2016779
+
+Uebungsgruppe 1
 '''
-
-d = 0
-
-def ProdZ(x,y):
+def prodZ(x,y):
     z = 0
     i = 0
     if (x<0):
@@ -16,14 +15,24 @@ def ProdZ(x,y):
         z = (z + y)
     return z
 
-def f(x):
-    if (x < 0):
-        return 0
-    elif (x == 0):
-        return 1
+def divZNeu(x,y):
+    i = 0
+    minus = 0
+    if (y != 0):
+        if ((y < 0) and (not(x < 0))):
+            y = (0-y)
+            minus = 1
+        if ((x < 0) and (not(y < 0))):
+            x = (0-x)
+            minus = 1
+        if ((x < 0) and (y < 0)):
+            x = (0-x)
+            y = (0-y)
+        while (x>=y):
+            i = (i + 1)
+            x = (x-y)
+    if(minus == 1):
+        ret = (0-i)
     else:
-        d = ProdZ(f((x-1)),2)
-    return d
-
-ausgabe = f(0.3)
-print ausgabe
+        ret = i
+    return ret
