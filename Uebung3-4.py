@@ -108,3 +108,7 @@ def main(x):
     
     y = Number(b1)
     return y
+
+n=9
+print (Number(DyadicRepresentation(2*n+3)))
+print (DyadicRepresentation(n))
