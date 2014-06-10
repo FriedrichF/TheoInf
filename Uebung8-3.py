@@ -23,7 +23,9 @@ def nea2dea(A):                      # liefert aequivalenten DEA (Potenzmengenko
     return [Sigma, Z1, delta1, frozenset({z0}), F1]
 
 def neaKomplement(A):                # liefert NEA, der das Komplement von L(A) akzeptiert,
-    [Sigma, Z, delta, z0, F] = A     # wobei A ein NEA entsprechend Definition 3.12 ist
+    B = nea2dea(A)
+    [Sigma, Z, delta, z0, F] = B
+    
     C = [Sigma, Z, delta, z0, Z-F]   # aktzeptierende Zustaende tauschen
     return C
 
@@ -31,17 +33,36 @@ def neaVereinigung(A,B):             # liefert NEA, der die Vereinigung von L(A)
     [ASigma, AZ, Adelta, Az0, AF] = A # wobei A,B NEAs entsprechend Definition 3.12 sind
     [BSigma, BZ, Bdelta, Bz0, BF] = B
     Sigma = ASigma | BSigma
-    Z = (1,AZ),(2,BZ),z0                 # Zustaende vereinen und z0 mitaufnehmen
+    
+    Z = set([])                     # Zustaende vereinigen
+    for z in AZ:
+        Z.add('1' + z)
+    for z in BZ:
+        Z.add('2' + z)
+    Z.add('z0')
 
-    if((Az0 not in AF) and (Bz0 not in BF)): # Wenn Die Startzustaende keine aktzeptierenden sind
-        F = (1,AF),(2,BF)
-    else:
-        F = (1,AF),(2,BF),z0
+    F = set()
+    for f in AF:
+        F.add('1' + f)
+    for f in BF:
+        F.add('2' + f)
+    if((Az0 in AF) or (Bz0 in BF)): # Wenn Die Startzustaende aktzeptierende sind
+        F.add('z0')
         
-    delta = (1,Adelta),(2,Bdelta)
+    delta = dict()                      # ueberfuehrungsfunktionen zusammenfuehren
+    for deltaA in Adelta.keys():
+        delta['1' + deltaA[0],deltaA[1]] = set({'1' + a for a in Adelta[deltaA[0],deltaA[1]]})
+    for deltaB in Bdelta.keys():
+        delta[('2' + deltaB[0]),deltaB[1]] = set({'2' + a for a in Bdelta[deltaB[0],deltaB[1]]})
+        
+    for element in Sigma:          # Alle z0 Uebergaenge auf neuen Z0 uebertragen
+        delta['z0',element] = set([])
+        if(delta['1' + Az0,element] != set()):
+            delta['z0',element] |= (delta['1' + Az0,element])
+        if(delta['2' + Bz0,element] != set()):
+            delta['z0',element] |= (delta['2' + Bz0,element])
     
-    
-    C = 0;
+    C = [Sigma, Z, delta, 'z0', F];
     return C
 
 def neaKonkatenation(A,B):           # liefert NEA, der L(A)L(B) akzeptiert,
@@ -52,5 +73,28 @@ def neaKonkatenation(A,B):           # liefert NEA, der L(A)L(B) akzeptiert,
     C = 0;
     return C
 
-Z = (1,2,3),(11,22,33)
-print(Z[0][0])
+Sigma = {'a', 'b'}              # Alphabet
+Z = {'Z0','Z1','Z2'}                   # Zustandsmenge
+delta2 = {}                      # Ueberfuehrungsfunktion
+delta2['Z0','a'] = set(['Z1'])
+delta2['Z0','b'] = set([])
+delta2['Z1','a'] = set(['Z1'])
+delta2['Z1','b'] = set(['Z2'])
+delta2['Z2','b'] = set([])
+delta2['Z2','a'] = set([])
+F = set(['Z2','Z0'])
+A1 = [Sigma,Z,delta2,'Z0',F]
+
+delta1 = {}                      # Ueberfuehrungsfunktion
+delta1['Z0','a'] = set(['Z1'])
+delta1['Z0','b'] = set(['Z0'])
+delta1['Z1','b'] = set(['Z2'])
+delta1['Z1','a'] = set([])
+delta1['Z2','a'] = set([])
+delta1['Z2','b'] = set([])
+F = set(['Z2'])
+A2 = [Sigma,Z,delta1,'Z0',F]
+
+A1K = neaVereinigung(A1, A2)
+[ASigma, AZ, Adelta, Az0, AF] = A1K
+print(A1K)

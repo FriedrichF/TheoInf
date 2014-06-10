@@ -8,6 +8,7 @@ Uebungsgruppe 1
 def deaDefine():                    # definiert einen DEA A
     Sigma = {'a', 'b', 'c'}              # Alphabet
     Z = {'Z0','Za','Zac','Zacb','Zacba','Zacbac','Zacbaca','Zacbacac'}                   # Zustandsmenge
+
     delta = {}                      # Ueberfuehrungsfunktion
     delta['Z0','c'] = 'Z0'
     delta['Z0','b'] = 'Z0'
@@ -33,6 +34,15 @@ def deaDefine():                    # definiert einen DEA A
     delta['Zacbacac','c'] = 'Zacbacac'
     delta['Zacbacac','b'] = 'Zacbacac'
     delta['Zacbacac','a'] = 'Zacbacac'
+    for d in delta.keys():    
+        print(d[0])
+    
+    
+    test = 'Z0'
+    try:
+        print(delta[test,'g'])
+    except KeyError:
+        pass
     F = {'Zacbacac'}                         # Menge der akzeptierenden Zustaende
     A = [Sigma, Z, delta, 'Z0', F]
     return A
@@ -47,4 +57,4 @@ def deaRun(A, w):                   # testet, ob der DEA A das Wort w akzeptiert
     return deaErweiterteUEF(delta, z0, w) in F
 
 A = deaDefine()
-print(deaRun(A,'aaacbacbacac'))
+print(deaRun(A,'aaacbaacabacac'))
