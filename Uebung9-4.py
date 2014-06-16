@@ -1,23 +1,20 @@
 '''
-Created on 13.06.2014
+Friedrich Fell    Matnr.:2009756
 
-@author: Friedrich
+Matthias Proestler    Matnr.:2016779
+
+Uebungsgruppe 1
 '''
 
-def isUnterscheidbar(zi, zj, Sigma, delta, offset, U, F):
+def isUnterscheidbar(zi, zj, Sigma, delta, offset, U, F): # Ueberprueft ob zustandspaar Unterscheidbar ist
     if type(zi) == set:
         zi = list(zi)[0]
         zj = list(zj)[0]
         
-    if offset < 0:
+    if offset < 0: # Wenn tiefe erreicht ist handelt es sich um einen Aequivalentes Zustandspaar
         return False
     
-    for s in Sigma:
-        if zi in F and zj not in F:
-            return True
-        elif zi not in F and zj in F:
-            return True
-        
+    for s in Sigma:        
         if zi == zj:
             return False
         
@@ -46,7 +43,7 @@ def deaUnterscheidbareZustaende(A):
     set = True
     offset = 1
     
-    #Jeden Zustand testen
+    #Jeden Zustand testen ob unterscheidbar
     for i in range(0,len(Z)):
         for j in range(i+1,len(Z)):
             if Z[i] in F and Z[j] not in F:
