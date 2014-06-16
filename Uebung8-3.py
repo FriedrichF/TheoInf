@@ -23,7 +23,7 @@ def nea2dea(A):                      # liefert aequivalenten DEA (Potenzmengenko
     return [Sigma, Z1, delta1, frozenset({z0}), F1]
 
 def neaKomplement(A):                # liefert NEA, der das Komplement von L(A) akzeptiert,
-    B = nea2dea(A)
+    B = nea2dea(A)                   # DEA erstellen
     [Sigma, Z, delta, z0, F] = B
     
     C = [Sigma, Z, delta, z0, Z-F]   # aktzeptierende Zustaende tauschen
@@ -41,13 +41,13 @@ def neaVereinigung(A,B):             # liefert NEA, der die Vereinigung von L(A)
         Z.add('2-' + z)
     Z.add('z0')
 
-    F = set()
+    F = set()                       # Aktzeptierende Zustaende festlegen
     for f in AF:
         F.add('1-' + f)
     for f in BF:
         F.add('2-' + f)
     if((Az0 in AF) or (Bz0 in BF)): # Wenn Die Startzustaende aktzeptierende sind
-        F.add('z0')
+        F.add('z0')                 # Ist auch der neue Startzustand aktzeptierend
         
     delta = dict()                      # ueberfuehrungsfunktionen zusammenfuehren
     for deltaA in Adelta.keys():
@@ -88,8 +88,8 @@ def neaKonkatenation(A,B):           # liefert NEA, der L(A)L(B) akzeptiert,
     delta = {}
     for deltaA in Adelta.keys():
         delta['1-' + deltaA[0],deltaA[1]] = set({'1-' + a for a in Adelta[deltaA[0],deltaA[1]]})
-        if deltaA[0] in AF:
-            delta['1-' + deltaA[0],deltaA[1]] |= ({'2-' + a for a in Bdelta[Bz0,deltaA[1]]})
+        if deltaA[0] in AF:                                                                     # Wenn der aktuelle Zustand aktzeptierend ist
+            delta['1-' + deltaA[0],deltaA[1]] |= ({'2-' + a for a in Bdelta[Bz0,deltaA[1]]})    # wird die Ueberfuehrung zum zweiten Automaten mit uebernommen
     for deltaB in Bdelta.keys():
         delta[('2-' + deltaB[0]),deltaB[1]] = set({'2-' + a for a in Bdelta[deltaB[0],deltaB[1]]})
     
