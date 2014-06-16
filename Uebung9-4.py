@@ -21,8 +21,10 @@ def deaUnterscheidbareZustaende(A):
             if Z[i] in F and Z[j] not in F:
                 set = True
                 U[i][j] = 'X'
-            if Z[i] not in F and Z[j] in F:
+            elif Z[i] not in F and Z[j] in F:
                 U[i][j] = 'X'
+            elif Z[i] == Z[j]:
+                U[i][j] = 'S'   #Wenn es sich um den gleichen Zustand handelt
     
     #Alle Zustaende testen bis ende erreicht
     while set:
@@ -32,6 +34,10 @@ def deaUnterscheidbareZustaende(A):
                 for j in range(0,len(Z)):
                     zi = Z[i]
                     zj = Z[j]
+                    
+                    if U[i][j] == 'X' or U[i][j] == 'S':    #Wenn der Zustand schon Unterscheidbar ist, dann weiter
+                        continue
+                    
                     for off in range(0,offset):
                         zi = delta[zi,s]
                         print(zi)
@@ -39,9 +45,11 @@ def deaUnterscheidbareZustaende(A):
                     if zi in F and zj not in F:
                         set = True
                         U[i][j] = 'X'
-                    if zi not in F and zj in F:
+                    elif zi not in F and zj in F:
                         U[i][j] = 'X'
                         set = True
+                    elif zi == zj:
+                        U[i][j] = 'S'
         offset = offset + 1
     print(U)
     return U
