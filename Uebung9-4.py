@@ -4,13 +4,43 @@ Created on 13.06.2014
 @author: Friedrich
 '''
 
+def isUnterscheidbar(zi, zj, Sigma, delta, offset, U, F):
+    if type(zi) == set:
+        zi = list(zi)[0]
+        zj = list(zj)[0]
+        
+    if offset < 0:
+        return False
+    
+    for s in Sigma:
+        if zi in F and zj not in F:
+            return True
+        elif zi not in F and zj in F:
+            return True
+        
+        if zi == zj:
+            return False
+        
+        # Symbol fuer Zustandspaar auslesen.
+        # Reihenfolge muss ueberprueft werden!
+        try:
+            symbol = U[zi,zj]
+        except KeyError:
+            symbol = U[zj,zi]
+            
+        if symbol == 'X':
+            return True
+        else:
+            if isUnterscheidbar(delta[zi,s], delta[zj, s], Sigma, delta, offset-1, U, F):
+                return True
+    
+
 # gibt alle Paare von unterscheidbaren Zustaenden in A zurueck
 def deaUnterscheidbareZustaende(A):
     [Sigma, Z, delta, z0, F] = A
     U = dict()
     
     Z = list(Z)
-    print(Z)
     Sigma = list(Sigma)
     
     set = True
@@ -18,7 +48,7 @@ def deaUnterscheidbareZustaende(A):
     
     #Jeden Zustand testen
     for i in range(0,len(Z)):
-        for j in range(0+i+1,len(Z)):
+        for j in range(i+1,len(Z)):
             if Z[i] in F and Z[j] not in F:
                 U[Z[i],Z[j]] = 'X'
             elif Z[i] not in F and Z[j] in F:
@@ -27,49 +57,29 @@ def deaUnterscheidbareZustaende(A):
                 U[Z[i],Z[j]] = 'A'   #Wenn es sich um den gleichen Zustand handelt
 
     #Alle Zustaende testen bis ende erreicht
+    print(U)
     while set:
         set = False
-        for s in Sigma:
-            for i in range(0,len(Z)):
-                for j in range(0+1+i,len(Z)):
-                    zi = Z[i]
-                    zj = Z[j]
-                    
-                    zi_tmp = zi
-                    zj_tmp = zj
-                    
-                    if U[zi,zj] == 'X':    #Wenn der Zustand schon Unterscheidbar ist, dann weiter
-                        break
-                    
-                    for off in range(0,offset):
-                        zi = delta[zi,s]
-                        zj = delta[zj,s]
-                        
-                    if (list(zi)[0] == list(zj)[0]):
-                        break
-                        
-                    # Symbol fuer Zustandspaar auslesen.
-                    # Reihenfolge muss ueberprueft werden!
-                    try:
-                        symbol = U[(list(zi)[0],list(zj)[0])]
-                    except KeyError:
-                        symbol = U[(list(zj)[0],list(zi)[0])]
-
-                    if symbol == 'X':
+        for i in range(0,len(Z)):
+            for j in range(1+i,len(Z)):
+                if U[Z[i],Z[j]] != 'X':
+                    if isUnterscheidbar(Z[i], Z[j], Sigma, delta, offset, U, F): # Ueberpruefen ob zustand unterscheidbar ist
                         set = True
-                        U[zi_tmp,zj_tmp] = 'X'
+                        U[Z[i],Z[j]] = 'X'
+                pass
 
         offset = offset + 1
-    print(U)
     
     # Dictonary in Liste umwandeln
     R = []
     for i in range(0, len(Z)):
-        for j in range(0+1+i,len(Z)):
+        for j in range(1+i,len(Z)):
             if U[Z[i],Z[j]] == 'A':
                 R.append((Z[i], Z[j]))
                 R.append((Z[j], Z[i]))
-    return U
+                
+    print(R)
+    return R
 
 def deasAequivalent(A, B):   # prueft, ob DEAs A und B die gleiche Sprache akzeptieren
     [ASigma, AZ, Adelta, Az0, AF] = A
@@ -79,7 +89,6 @@ def deasAequivalent(A, B):   # prueft, ob DEAs A und B die gleiche Sprache akzep
     Z |= BZ
     delta = Adelta
     delta.update(Bdelta)
-    print(delta)
     F = AF
     F |= BF
     
