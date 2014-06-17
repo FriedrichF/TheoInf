@@ -6,12 +6,12 @@ Matthias Proestler    Matnr.:2016779
 Uebungsgruppe 1
 '''
 
-def getZustandIndex(z, unterschZ):
+def getZustandIndex(z, unterschZ):  # sucht einen Zustand in einer Liste und gibt Index zurueck
     Aequi = []
     i = -1
     for a in unterschZ:
         i = i + 1
-        if type(a) == tuple:
+        if type(a) == tuple:    # Wenn es sich um ein Tupel handelt wird dieses weiter aufgeteilt
             for b in a:
                 if b == z:
                     return i
@@ -96,7 +96,7 @@ def deaUnterscheidbareZustaende(A):
                 
     return R
             
-def getErreichbareZ(z0, Sigma, delta):
+def getErreichbareZ(z0, Sigma, delta):  # Liefert alle erreichbaren Zustaende zurueck
     R = [z0]
     elementZExist = True
     i = 0
@@ -117,21 +117,23 @@ def miniDea(A):
     A = [Sigma, Z, delta, z0, F]
     unterschZ = deaUnterscheidbareZustaende(A)
     
+    # Fuege fehlende Zustaende zu den Aequivalenten hinzu
     for z in Z:
         if getZustandIndex(z, unterschZ) == -1:
-            unterschZ.append(z)
-    print(unterschZ)
+            unterschZ.append(z)    
     
+    # Jeder Zustand der einen alten aktzeptierenden Zustand enthaelt wird aktzeptierend
     F_mini = set()
     for f in F:
         index = getZustandIndex(f, unterschZ)
         if index != -1:
             F_mini.add(unterschZ[index])
     
+    # Uebergangsfunktion erzeugen
     delta_mini = {}
     for z in Z:
         for s in Sigma:
-            index = getZustandIndex(z, unterschZ)
+            index = getZustandIndex(z, unterschZ)   # Zustand in neuen Zustaenden suchen
             index_to = getZustandIndex(list(delta[z,s])[0], unterschZ)
             delta_mini[unterschZ[index],s] = set([unterschZ[index_to]])
     
