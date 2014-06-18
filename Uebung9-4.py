@@ -32,8 +32,8 @@ def isUnterscheidbar(zi, zj, Sigma, delta, offset, U, F): # Ueberprueft ob zusta
                 return True
     
 
-# gibt alle Paare von unterscheidbaren Zustaenden in A zurueck
-def deaUnterscheidbareZustaende(A):
+# gibt alle Paare von NICHT unterscheidbaren Zustaenden in A zurueck
+def deaNichtUnterscheidbareZustaende(A):
     [Sigma, Z, delta, z0, F] = A
     U = dict()
     
@@ -54,7 +54,6 @@ def deaUnterscheidbareZustaende(A):
                 U[Z[i],Z[j]] = 'A'   #Wenn es sich um den gleichen Zustand handelt
 
     #Alle Zustaende testen bis ende erreicht
-    print(U)
     while set:
         set = False
         for i in range(0,len(Z)):
@@ -75,7 +74,6 @@ def deaUnterscheidbareZustaende(A):
                 R.append((Z[i], Z[j]))
                 R.append((Z[j], Z[i]))
                 
-    print(R)
     return R
 
 def deasAequivalent(A, B):   # prueft, ob DEAs A und B die gleiche Sprache akzeptieren
@@ -91,7 +89,7 @@ def deasAequivalent(A, B):   # prueft, ob DEAs A und B die gleiche Sprache akzep
     
     C = [Sigma, Z, delta, Az0, F]
 
-    return (Az0, Bz0) not in deaUnterscheidbareZustaende(C)
+    return (Az0, Bz0) in deaNichtUnterscheidbareZustaende(C)
 
 Sigma = {'a', 'b','c'}              # Alphabet
 Z = {'Z1','Z2','Z3'}                   # Zustandsmenge
